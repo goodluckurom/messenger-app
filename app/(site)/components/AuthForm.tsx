@@ -24,7 +24,7 @@ const AuthForm = () => {
       router.replace("/users");
       console.log("Authenticated!! ");
     }
-  }, [Session?.status]);
+  }, [Session?.status, router]);
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {

@@ -3,16 +3,20 @@ import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
 
-interface IParams {
-  conversationId?: string;
-}
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: IParams }
+  req: Request,
+  { params }: { params: Record<string, string> }
 ) {
   try {
-    const { conversationId } = params;
+    const conversationId = params.conversationId;
+
+    if (!conversationId) {
+      return new NextResponse("Conversation ID is required", { status: 400 });
+    }
+
     const currentUser = await getCurrentUser();
 
     if (!currentUser?.id) {
@@ -20,12 +24,8 @@ export async function DELETE(
     }
 
     const existingConversation = await prisma.conversation.findUnique({
-      where: {
-        id: conversationId,
-      },
-      include: {
-        users: true,
-      },
+      where: { id: conversationId },
+      include: { users: true },
     });
 
     if (!existingConversation) {
@@ -52,8 +52,8 @@ export async function DELETE(
     });
 
     return NextResponse.json(deletedConversation);
-  } catch (error: any) {
-    console.log(error, "ERROR_CONVERSATION_DELETE");
+  } catch (error) {
+    console.error("ERROR_CONVERSATION_DELETE", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
