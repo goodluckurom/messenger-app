@@ -9,6 +9,12 @@ import { useCallback, useState } from "react";
 interface UserBoxProps {
   data: User;
 }
+
+interface ConversationResponse {
+  id: string;
+  // Add other properties you expect in the response if needed
+}
+
 const UserBox: React.FC<UserBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,13 +23,13 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
     setIsLoading(true);
 
     axios
-      .post("/api/conversations", {
+      .post<ConversationResponse>("/>api/conversations", {
         userId: data.id,
       })
       .then((data) => {
         router.push(`/conversations/${data.data.id}`);
-      })
-      .finally(() => setIsLoading(false));
+        setIsLoading(false);
+      });
   }, [data, router]);
 
   return (

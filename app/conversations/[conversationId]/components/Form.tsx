@@ -5,6 +5,10 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";
 import MessageInput from "./MessageInput";
 
+interface CloudinaryResponse {
+  secure_url: string;
+  // Add other fields you expect from Cloudinary
+}
 const Form = () => {
   const { conversationId } = useConversation();
   const {
@@ -38,7 +42,7 @@ const Form = () => {
       formData.append("upload_preset", "Messenger_App"); // Cloudinary preset name
 
       // Send the file to Cloudinary
-      const cloudinaryResponse = await axios.post(
+      const cloudinaryResponse = await axios.post<CloudinaryResponse>(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );

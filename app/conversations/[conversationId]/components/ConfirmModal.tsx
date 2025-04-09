@@ -28,8 +28,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
         router.replace("/conversations");
         router.refresh();
       })
-      .catch((error) => toast.error("Something went wrong", error))
-      .finally(() => setIsLoading(false));
+      .catch((error) => {
+        toast.error("Something went wrong", error);
+        setIsLoading(false);
+      });
   }, [conversationId, router, onClose]);
 
   return (

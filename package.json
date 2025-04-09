@@ -24,7 +24,7 @@
     "eslint": "9.14.0",
     "eslint-config-next": "15.0.2",
     "lodash": "^4.17.21",
-    "next": "15.0.2",
+    "next": "^14.2.18",
     "next-auth": "^4.24.10",
     "next-cloudinary": "^6.16.0",
     "postcss": "8.4.47",

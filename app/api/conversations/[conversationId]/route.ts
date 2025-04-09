@@ -1,17 +1,17 @@
-import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 import prisma from "@/app/libs/prismadb";
 import { pusherServer } from "@/app/libs/pusher";
 
-export const dynamic = "force-dynamic";
-export const dynamicParams = true;
+interface RouteContextParams {
+  params: {
+    conversationId: string;
+  };
+}
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: Record<string, string> }
-) {
+export async function DELETE(request: Request, context: RouteContextParams) {
   try {
-    const conversationId = params.conversationId;
+    const { conversationId } = context.params;
 
     if (!conversationId) {
       return new NextResponse("Conversation ID is required", { status: 400 });

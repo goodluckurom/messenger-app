@@ -53,9 +53,14 @@ const AuthForm = () => {
       //Axios register
       axios
         .post("/api/register", data)
-        .then(() => signIn("credentials", data))
-        .catch((error) => toast.error("Something went wrong", error))
-        .finally(() => setIsLoading(false));
+        .then(() => {
+          signIn("credentials", data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          toast.error("Something went wrong", error);
+          setIsLoading(false);
+        });
     }
     if (variant === "LOGIN") {
       //Next auth sign in

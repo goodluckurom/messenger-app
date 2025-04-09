@@ -10,12 +10,16 @@ import Modal from "../Modal";
 import Image from "next/image";
 import Button from "../Button";
 import Input from "../inputs/Input";
-import { HiPhoto } from "react-icons/hi2";
 
 interface SettingsModalProps {
   isOpen?: boolean;
   onClose: () => void;
   currentUser: User;
+}
+
+interface CloudinaryResponse {
+  secure_url: string;
+  // Add other fields you expect from Cloudinary
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -52,7 +56,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       formData.append("file", file);
       formData.append("upload_preset", "Messenger_App");
 
-      const cloudinaryResponse = await axios.post(
+      const cloudinaryResponse = await axios.post<CloudinaryResponse>(
         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
         formData
       );
@@ -81,8 +85,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         onClose();
         toast.success("Profile updated successfully");
       })
-      .catch(() => toast.error("Something went wrong!"))
-      .finally(() => setIsLoading(false));
+      .catch(() => {
+        toast.error("Something went wrong!");
+        setIsLoading(false);
+      });
   };
 
   return (
